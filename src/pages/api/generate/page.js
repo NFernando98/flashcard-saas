@@ -10,6 +10,11 @@ import {
   Card,
   Grid,
   CardContent,
+  Dialog,
+  DialogTitle,
+  DialogContent,
+  DialogContentText,
+  DialogActions,
 } from "@mui/material";
 
 export default function Generate() {
@@ -138,10 +143,31 @@ export default function Generate() {
             ))}
           </Grid>
         </Box>
-        
       )}
 
-      
+      <Dialog open={dialogOpen} onClose={handleCloseDialog}>
+        <DialogTitle>Save Flashcard Set</DialogTitle>
+        <DialogContent>
+          <DialogContentText>
+            Please enter a name for your flashcard set.
+          </DialogContentText>
+          <TextField
+            autoFocus
+            margin="dense"
+            label="Set Name"
+            type="text"
+            fullWidth
+            value={setName}
+            onChange={(e) => setSetName(e.target.value)}
+          />
+        </DialogContent>
+        <DialogActions>
+          <Button onClick={handleCloseDialog}>Cancel</Button>
+          <Button onClick={saveFlashcards} color="primary">
+            Save
+          </Button>
+        </DialogActions>
+      </Dialog>
     </Container>
   );
 }
