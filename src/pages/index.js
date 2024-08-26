@@ -1,11 +1,32 @@
-import React from 'react';
-import { Box, Button, Grid, Typography, AppBar, Toolbar } from '@mui/material';
-import { SignedIn, SignedOut, UserButton } from '@clerk/nextjs';
-import Link from 'next/link';
+import React from "react";
+import { AppBar, Toolbar, Typography, Button, Box, Grid } from "@mui/material";
+import { SignedIn, SignedOut, UserButton } from "@clerk/nextjs";
 
-export default function Home() {
+export default function HomePage() {
+  // Function to handle Stripe checkout for the Pro plan
+  const handleSubmit = async () => {
+    try {
+      const checkoutSession = await fetch("/api/checkout_sessions", {
+        method: "POST",
+        headers: { origin: "http://localhost:3000" },
+      });
+      const checkoutSessionJson = await checkoutSession.json();
+
+      const stripe = await getStripe(); // Make sure to define this function elsewhere
+      const { error } = await stripe.redirectToCheckout({
+        sessionId: checkoutSessionJson.id,
+      });
+
+      if (error) {
+        console.warn(error.message);
+      }
+    } catch (error) {
+      console.error("Error during checkout: ", error);
+    }
+  };
+
   return (
-    <>
+    <div>
       {/* Header and Navigation */}
       <AppBar position="static">
         <Toolbar>
@@ -27,7 +48,7 @@ export default function Home() {
       </AppBar>
 
       {/* Hero Section */}
-      <Box sx={{ textAlign: 'center', my: 4 }}>
+      <Box sx={{ textAlign: "center", my: 4 }}>
         <Typography variant="h2" component="h1" gutterBottom>
           Welcome to Flashcard SaaS
         </Typography>
@@ -38,7 +59,6 @@ export default function Home() {
           variant="contained"
           color="primary"
           sx={{ mt: 2, mr: 2 }}
-          component={Link}
           href="/generate"
         >
           Get Started
@@ -54,72 +74,83 @@ export default function Home() {
           Features
         </Typography>
         <Grid container spacing={4}>
-          <Grid item xs={12} sm={6} md={4}>
-            <Typography variant="h6">Easy to Use</Typography>
-            <Typography>Quickly create and manage flashcards from your notes.</Typography>
+          <Grid item xs={12} sm={6}>
+            <Typography variant="h6" gutterBottom>
+              Create Flashcards
+            </Typography>
+            <Typography variant="body1">
+              Easily create flashcards from your notes and organize them into
+              sets.
+            </Typography>
           </Grid>
-          <Grid item xs={12} sm={6} md={4}>
-            <Typography variant="h6">Organize Your Sets</Typography>
-            <Typography>Group flashcards by topic or category for better learning.</Typography>
+          <Grid item xs={12} sm={6}>
+            <Typography variant="h6" gutterBottom>
+              Study Mode
+            </Typography>
+            <Typography variant="body1">
+              Practice with a study mode designed to help you retain
+              information.
+            </Typography>
           </Grid>
-          <Grid item xs={12} sm={6} md={4}>
-            <Typography variant="h6">Track Your Progress</Typography>
-            <Typography>Monitor your learning progress with insights and stats.</Typography>
+          <Grid item xs={12} sm={6}>
+            <Typography variant="h6" gutterBottom>
+              Sync Across Devices
+            </Typography>
+            <Typography variant="body1">
+              Access your flashcards on any device, at any time.
+            </Typography>
+          </Grid>
+          <Grid item xs={12} sm={6}>
+            <Typography variant="h6" gutterBottom>
+              Share with Others
+            </Typography>
+            <Typography variant="body1">
+              Share your flashcard sets with friends and collaborate.
+            </Typography>
           </Grid>
         </Grid>
       </Box>
 
       {/* Pricing Section */}
-      <Box sx={{ my: 6, textAlign: 'center' }}>
+      <Box sx={{ my: 6, textAlign: "center" }}>
         <Typography variant="h4" component="h2" gutterBottom>
           Pricing
         </Typography>
         <Grid container spacing={4} justifyContent="center">
           <Grid item xs={12} sm={6} md={4}>
-            <Typography variant="h6">Free Plan</Typography>
-            <Typography>$0 / month</Typography>
-            <Typography>Basic features with limited sets and flashcards.</Typography>
+            <Box sx={{ border: "1px solid gray", padding: 3 }}>
+              <Typography variant="h5" gutterBottom>
+                Free Plan
+              </Typography>
+              <Typography variant="body1" gutterBottom>
+                Access to basic features including flashcard creation and study
+                mode.
+              </Typography>
+              <Button variant="outlined" color="primary">
+                Get Started for Free
+              </Button>
+            </Box>
           </Grid>
           <Grid item xs={12} sm={6} md={4}>
-            <Typography variant="h6">Pro Plan</Typography>
-            <Typography>$9.99 / month</Typography>
-            <Typography>Access unlimited flashcards and advanced features.</Typography>
-            <Button
-              variant="contained"
-              color="primary"
-              sx={{ mt: 2 }}
-              onClick={handleSubmit}
-            >
-              Upgrade Now
-            </Button>
+            <Box sx={{ border: "1px solid gray", padding: 3 }}>
+              <Typography variant="h5" gutterBottom>
+                Pro Plan
+              </Typography>
+              <Typography variant="body1" gutterBottom>
+                Unlock all features, including syncing across devices and
+                priority support.
+              </Typography>
+              <Button
+                variant="contained"
+                color="primary"
+                onClick={handleSubmit}
+              >
+                Upgrade to Pro
+              </Button>
+            </Box>
           </Grid>
         </Grid>
       </Box>
-    </>
+    </div>
   );
 }
-
-const handleSubmit = async () => {
-  try {
-    const checkoutSession = await fetch('/api/checkout_sessions', {
-      method: 'POST',
-    });
-    const checkoutSessionJson = await checkoutSession.json();
-
-    const stripe = await getStripe();
-    const { error } = await stripe.redirectToCheckout({
-      sessionId: checkoutSessionJson.id,
-    });
-
-    if (error) {
-      console.warn(error.message);
-    }
-  } catch (error) {
-    console.error('Error during checkout:', error);
-  }
-};
-
-const getStripe = async () => {
-  const { loadStripe } = await import('@stripe/stripe-js');
-  return loadStripe('your-publishable-key-here'); // Add your Stripe publishable key
-};
