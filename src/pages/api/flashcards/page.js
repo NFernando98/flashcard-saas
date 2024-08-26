@@ -9,7 +9,7 @@ import {
 } from "@mui/material";
 import { useUser } from "@clerk/nextjs";
 import { useRouter } from "next/router";
-import { db } from "@/firebase"; // Ensure this points to your Firebase setup
+import { db } from "../firebase"; // Ensure this points to your Firebase setup
 import { collection, doc, getDoc, setDoc } from "firebase/firestore";
 
 export default function Flashcard() {
