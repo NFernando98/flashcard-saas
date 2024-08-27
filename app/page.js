@@ -1,7 +1,9 @@
+'use client';
+
 import React from "react";
 import { AppBar, Toolbar, Typography, Button, Box, Grid } from "@mui/material";
 import { SignedIn, SignedOut, UserButton } from "@clerk/nextjs";
-import { getStripe } from "../utils/get-stripe";
+import { getStripe } from "./utils/get-stripe";
 
 export default function HomePage() {
   // Function to handle Stripe checkout for the Pro plan
