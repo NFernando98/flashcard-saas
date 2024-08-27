@@ -1,11 +1,6 @@
-// app/generate/route.js
+// app/api/generate/route.js
 import { NextResponse } from "next/server";
 import OpenAI from "openai";
-
-export async function GET() {
-  // Handle GET request if needed
-  return NextResponse.json({ message: 'GET request to /generate' });
-}
 
 const systemPrompt = `
 You are a flashcard creator, you take in text and create multiple flashcards from it. Make sure to create exactly 10 flashcards.
@@ -22,21 +17,29 @@ You should return in the following JSON format:
 `;
 
 export async function POST(req) {
-    const openai = new OpenAI()
-    const data = await req.text()
-  
+  console.log("got here")
+  try {
+    console.log("now here")
+
+    const openai = new OpenAI();
+    const data = await req.text();
+    
     const completion = await openai.chat.completions.create({
       messages: [
         { role: 'system', content: systemPrompt },
         { role: 'user', content: data },
       ],
-      model: 'gpt-4o',
+      model: 'gpt-4o-mini',
       response_format: { type: 'json_object' },
-    })
-  
+    });
+
     // Parse the JSON response from the OpenAI API
-    const flashcards = JSON.parse(completion.choices[0].message.content)
-  
+    const flashcards = JSON.parse(completion.choices[0].message.content);
+
     // Return the flashcards as a JSON response
-    return NextResponse.json(flashcards.flashcards)
+    return NextResponse.json(flashcards.flashcards);
+  } catch (error) {
+    console.error("Error in API route:", error);
+    return NextResponse.json({ error: "Internal Server Error" }, { status: 500 });
+  }
 }
