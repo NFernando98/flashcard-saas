@@ -2,7 +2,7 @@
 import { initializeApp } from "firebase/app";
 // TODO: Add SDKs for Firebase products that you want to use
 // https://firebase.google.com/docs/web/setup#available-libraries
-import { getFirestore } from 'firebase/firestore';
+import { getFirestore } from "firebase/firestore";
 
 // Your web app's Firebase configuration
 const firebaseConfig = {
@@ -11,10 +11,10 @@ const firebaseConfig = {
   projectId: "flashcards-c4219",
   storageBucket: "flashcards-c4219.appspot.com",
   messagingSenderId: "958276847123",
-  appId: "1:958276847123:web:0f816b64f48c658af521e6"
+  appId: "1:958276847123:web:0f816b64f48c658af521e6",
 };
 
 // Initialize Firebase
 const app = initializeApp(firebaseConfig);
 const db = getFirestore(app);
-export default db;
+export { db };

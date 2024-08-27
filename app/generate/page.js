@@ -65,22 +65,24 @@ export default function Generate() {
   };
 
   const handleSubmit = async () => {
-    // We'll implement the API call here
     if (!text.trim()) {
       alert("Please enter some text to generate flashcards.");
       return;
     }
-
+  
     try {
-      const response = await fetch("/api/generate", {
+      const response = await fetch("/generate", {
         method: "POST",
+        headers: {
+          "Content-Type": "text/plain",
+        },
         body: text,
       });
-
+  
       if (!response.ok) {
         throw new Error("Failed to generate flashcards");
       }
-
+  
       const data = await response.json();
       setFlashcards(data);
     } catch (error) {
@@ -88,6 +90,7 @@ export default function Generate() {
       alert("An error occurred while generating flashcards. Please try again.");
     }
   };
+  
 
   return (
     <Container maxWidth="md">

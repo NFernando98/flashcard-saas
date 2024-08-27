@@ -1,5 +1,11 @@
+// app/generate/route.js
 import { NextResponse } from "next/server";
 import OpenAI from "openai";
+
+export async function GET() {
+  // Handle GET request if needed
+  return NextResponse.json({ message: 'GET request to /generate' });
+}
 
 const systemPrompt = `
 You are a flashcard creator, you take in text and create multiple flashcards from it. Make sure to create exactly 10 flashcards.
@@ -33,4 +39,4 @@ export async function POST(req) {
   
     // Return the flashcards as a JSON response
     return NextResponse.json(flashcards.flashcards)
-  }
+}
