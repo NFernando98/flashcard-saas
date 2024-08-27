@@ -1,12 +1,13 @@
 import React from "react";
 import { AppBar, Toolbar, Typography, Button, Box, Grid } from "@mui/material";
 import { SignedIn, SignedOut, UserButton } from "@clerk/nextjs";
+import { getStripe } from "../utils/get-stripe";
 
 export default function HomePage() {
   // Function to handle Stripe checkout for the Pro plan
   const handleSubmit = async () => {
     try {
-      const checkoutSession = await fetch("/api/checkout_sessions", {
+      const checkoutSession = await fetch("./checkout_sessions", {
         method: "POST",
         headers: { origin: "http://localhost:3000" },
       });

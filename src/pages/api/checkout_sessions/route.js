@@ -45,11 +45,9 @@ export async function POST(req) {
     });
   } catch (error) {
     console.error("Error creating checkout session:", error);
-    return new NextResponse(
-      JSON.stringify({ error: { message: error.message } }),
-      {
-        status: 500,
-      }
+    return NextResponse.json(
+      { error: { message: error.message } },
+      { status: 500 }
     );
   }
 }
