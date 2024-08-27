@@ -9,13 +9,14 @@ export default function HomePage() {
   // Function to handle Stripe checkout for the Pro plan
   const handleSubmit = async () => {
     try {
-      const checkoutSession = await fetch("./checkout_sessions", {
+      const checkoutSession = await fetch("/checkout_sessions", {
         method: "POST",
         headers: { origin: "http://localhost:3000" },
       });
       const checkoutSessionJson = await checkoutSession.json();
 
       const stripe = await getStripe(); // Make sure to define this function elsewhere
+      console.log("got here", stripe)
       const { error } = await stripe.redirectToCheckout({
         sessionId: checkoutSessionJson.id,
       });
